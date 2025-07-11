@@ -5,18 +5,18 @@ import com.example.finelytics.domain.model.CompanyListing
 
 fun CompanyListingEntity.toCompanyListing(): CompanyListing{
     return CompanyListing(
-        name = this.name,
-        exchange = this.exchange,
-        symbol= this.symbol
+        name = name,
+        exchange = exchange,
+        symbol= symbol
     )
 }
 //This is an extension function.Works same as writing methods inside of CompanyListingEntity
 
 fun CompanyListing.toCompanyListingEntity(): CompanyListingEntity{
     return CompanyListingEntity(
-        name = this.name,
-        exchange = this.exchange,
-        symbol= this.symbol
+        name = name,
+        exchange = exchange,
+        symbol= symbol
     )
 }
 

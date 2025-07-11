@@ -18,15 +18,18 @@ interface StockDao {
 
     //The Table name is coming from @ENTITY in CompanyListingEntity which becomes the name of the table but all in lower case
     //So that's why "DELETE FROM companylistingentity"
+
     @Query("DELETE FROM companylistingentity")
     suspend fun clearCompanyListings()
 
 
     @Query(
-        """SELECT * 
+        """
+            SELECT * 
             FROM companylistingentity 
-            WHERE LOWER(NAME) LIKE '%'||LOWER(:query)||'%' 
-            OR UPPER(:query) == symbol"""
+            WHERE LOWER(name) LIKE '%'||LOWER(:query)||'%' 
+            OR UPPER(:query) == symbol
+        """
             )
     suspend fun searchCompanyListings(query: String): List<CompanyListingEntity>
 }

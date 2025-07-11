@@ -57,17 +57,3 @@ fun CompanyItem(
 
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun CompanyItemPreview(
-    company: CompanyListing = CompanyListing(
-        name = "Agilent Technologies Inc",
-        symbol = "A",
-        exchange = "NYSE"
-    )
-){
-    FinelyticsTheme {
-        CompanyItem(company = company)
-    }
-}

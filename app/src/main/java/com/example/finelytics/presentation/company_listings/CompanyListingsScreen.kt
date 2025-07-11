@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.finelytics.domain.model.CompanyListing
@@ -44,11 +45,13 @@ fun CompanyListingsScreen(
 
     Scaffold { paddingValues ->
         Surface(Modifier.fillMaxSize().padding(paddingValues)) {
-            Column {
+            Column(Modifier.fillMaxSize()) {
                 OutlinedTextField(
                     value = state.searchQuery,
                     onValueChange = {
-                        viewModel.onEvent(CompanyListingsEvent.OnSearchQueryChange(it))
+                        viewModel.onEvent(
+                            CompanyListingsEvent.OnSearchQueryChange(it)
+                        )
                     },
                     modifier = Modifier.padding(16.dp).fillMaxWidth(),
                     placeholder = { Text(text = "Search...") },
