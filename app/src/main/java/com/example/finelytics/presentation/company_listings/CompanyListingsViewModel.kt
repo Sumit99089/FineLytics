@@ -5,14 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.query
-import com.example.finelytics.domain.model.CompanyListing
 import com.example.finelytics.domain.repository.StockRepositoryInterface
 import com.example.finelytics.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -56,7 +53,7 @@ class CompanyListingsViewModel @Inject constructor(
                     }
                     is Resource.Error-> Unit
                     is Resource.Loading->{
-                        state = state.copy(isLoading = result.isLoading)
+                        state = state.copy(isLoading = result.isLoading, isRefreshing = result.isLoading)
                     }
                 }
             }

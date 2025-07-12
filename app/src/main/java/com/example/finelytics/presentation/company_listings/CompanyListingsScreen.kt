@@ -6,17 +6,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -41,10 +47,14 @@ fun CompanyListingsScreen(
     viewModel: CompanyListingsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = viewModel.state.isRefreshing)
+    val pullToRefreshState = rememberPullToRefreshState()
 
     Scaffold { paddingValues ->
-        Surface(Modifier.fillMaxSize().padding(paddingValues)) {
+        Surface(
+            Modifier.fillMaxSize().padding(paddingValues),
+            color = MaterialTheme.colorScheme.background,
+            contentColor = MaterialTheme.colorScheme.onBackground
+        ) {
             Column(Modifier.fillMaxSize()) {
                 OutlinedTextField(
                     value = state.searchQuery,
@@ -54,14 +64,35 @@ fun CompanyListingsScreen(
                         )
                     },
                     modifier = Modifier.padding(16.dp).fillMaxWidth(),
-                    placeholder = { Text(text = "Search...") },
+                    placeholder = { Text(text = "Search...", color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)) },
                     maxLines = 1,
-                    singleLine = true
+                    singleLine = true,
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+                        focusedContainerColor = MaterialTheme.colorScheme.background,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                        cursorColor = MaterialTheme.colorScheme.onBackground,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                    )
                 )
-                SwipeRefresh(
-                    state = swipeRefreshState,
+                PullToRefreshBox(
+                    modifier = Modifier.padding(paddingValues),
+                    state = pullToRefreshState,
+                    isRefreshing = state.isRefreshing,
                     onRefresh = {
                         viewModel.onEvent(CompanyListingsEvent.Refresh)
+                    },
+                    indicator = {
+                        PullToRefreshDefaults.Indicator(
+                            state = pullToRefreshState,
+                            isRefreshing = state.isRefreshing,
+                            modifier = Modifier.align(Alignment.TopCenter),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                     }
                 ) {
                     LazyColumn(
@@ -73,19 +104,21 @@ fun CompanyListingsScreen(
                                 company = company,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickable {
-                                        // TODO: Navigate to detail screen
-                                    }
+                                    .clickable { /* TODO: Navigate */ }
                                     .padding(16.dp)
                             )
-                            if(index < state.companies.size) {
+                            if (index < state.companies.size - 1) {
                                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                             }
                         }
                     }
                 }
+
             }
         }
     }
 }
+
+
+
 
